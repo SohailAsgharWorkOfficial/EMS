@@ -149,7 +149,7 @@ Prerequisites:
 
 ```
 
-https://github.com/Darsh-Jogi/Employee-Management-System.git
+https://github.com/SohailAsgharWorkOfficial/EMS.git
 
 ```
 
@@ -244,7 +244,7 @@ Phase 4: Optimize for scalability and deploy a production-ready version.
 
 ## 🧑‍💻 Authors & Acknowledgments
 
-Darsh Jogi: Project Lead and Software Engineer
+Sohail Asghar: Project Lead and Senior Developer
 
 Special Thanks: To all contributors and testers who made this project possible.
 
@@ -257,8 +257,8 @@ This project is licensed under the MIT License.
 
 For any questions or support, feel free to reach out:
 
-Email: darshjogi001@gmail.com
+Email: sohailasghar.workofficial@gmail.com
 
-LinkedIn: [Darsh Jogi](https://www.linkedin.com/in/darsh-jogi-info/).
+LinkedIn: [Sohail Asghar](https://www.linkedin.com/in/sohail-asghar-4068a0247/).
 
 Thank you for visiting the Employees Management System (EMS) project! We hope it provides valuable insights into how technology can simplify employee management.
