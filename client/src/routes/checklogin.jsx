@@ -10,6 +10,6 @@ export const CheckLogin = ({ children }) => {
         dispatch(HandleGetEmployees({ apiroute: "CHECKELOGIN" }))
     }
     return (
-        isAuthenticated ? <Navigate to={"/employee-dashboard"} /> : children
+        isAuthenticated ? <Navigate to={"/auth/employee/employee-dashboard"} /> : children
     )
 }

@@ -166,7 +166,7 @@ export const HandleEmplyoeeLogout = async (req, res) => {
 export const HandleEmplyoeeForgotPassword = async (req, res) => {
     const { email } = req.body
     try {
-        const employee = await Employee.findOne({ email: email, organizationID: req.ORGID })
+        const employee = await Employee.findOne({ email: email })
 
         if (!employee) {
             return res.status(401).json({ success: false, message: "Employee Email Does Not Exist, Please Enter Correct One" })
@@ -192,7 +192,7 @@ export const HandleEmplyoeeSetPassword = async (req, res) => {
     const { token } = req.params
     const { password } = req.body
     try {
-        if (req.cookies.token) {
+        if (req.cookies.EMtoken) {
             res.clearCookie("EMtoken")
         }
         const employee = await Employee.findOne({ resetpasswordtoken: token, resetpasswordexpires: { $gt: Date.now() } })

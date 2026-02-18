@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
+import { apiService } from "../apis/APIService";
 import { HRDepartmentPageEndPoints } from "../apis/APIsEndpoints";
+
+const getErrorPayload = (error) => (
+    error?.response?.data || { success: false, message: error?.message || "Network error" }
+)
 
 export const HandleGetHRDepartments = createAsyncThunk('HandleGetHRDepartments', async (HRDepartmentPageData, { rejectWithValue }) => {
     try {
@@ -10,7 +14,7 @@ export const HandleGetHRDepartments = createAsyncThunk('HandleGetHRDepartments',
         });
         return response.data;
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 });
 
@@ -22,7 +26,7 @@ export const HandlePostHRDepartments = createAsyncThunk('HandlePostHRDepartments
         });
         return response.data;
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 });
 
@@ -34,7 +38,7 @@ export const HandlePatchHRDepartments = createAsyncThunk('HandlePatchHRDepartmen
         });
         return response.data;
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 });
 
@@ -47,6 +51,6 @@ export const HandleDeleteHRDepartments = createAsyncThunk("HandleDeleteHRDepartm
         });
         return response.data;
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 });

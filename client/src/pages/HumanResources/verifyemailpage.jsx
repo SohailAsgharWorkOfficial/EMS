@@ -37,7 +37,7 @@ export const VerifyEmailPage = () => {
 
         if (HRState.isVerified) {
             loadingbar.current.complete()
-            navigate("/auth/HR/dashboard") 
+            navigate("/HR/dashboard/dashboard-data") 
         }
     }, [HRState.isVerified, HRState.isVerifiedEmailAvailable, HRState.error.content])
 

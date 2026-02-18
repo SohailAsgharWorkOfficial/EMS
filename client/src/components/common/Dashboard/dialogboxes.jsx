@@ -316,7 +316,10 @@ export const EmployeesIDSDialogBox = ({ DepartmentID }) => {
             Set_selectedEmployeesData({ ...SelectedEmployeesData, employeeIDArray: SelectedEmployeesData.employeeIDArray.filter((item) => item !== EMID) })
         }
         else if (!SelectedEmployeesData.employeeIDArray.includes(EMID)) {
-            Set_selectedEmployeesData({ ...SelectedEmployeesData }, SelectedEmployeesData.employeeIDArray.push(EMID))
+            Set_selectedEmployeesData({
+                ...SelectedEmployeesData,
+                employeeIDArray: [...SelectedEmployeesData.employeeIDArray, EMID]
+            })
         }
     }
 

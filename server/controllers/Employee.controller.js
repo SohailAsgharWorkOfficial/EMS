@@ -38,7 +38,26 @@ export const HandleEmployeeByHR = async (req, res) => {
 
 export const HandleEmployeeByEmployee = async (req, res) => {
     try {
-        const employee = await Employee.findOne({ _id: req.EMid, organizationID: req.ORGID }).select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest")
+        const employee = await Employee.findOne({ _id: req.EMid, organizationID: req.ORGID })
+            .select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest")
+            .populate("department", "name")
+            .populate({
+                path: "salary",
+                select: "basicpay bonuses deductions netpay currency duedate paymentdate status createdAt",
+                options: { sort: { duedate: -1 } }
+            })
+            .populate({
+                path: "notice",
+                select: "title content audience createdAt"
+            })
+            .populate({
+                path: "leaverequest",
+                select: "title reason startdate enddate status createdAt"
+            })
+            .populate({
+                path: "generaterequest",
+                select: "requesttitle requestconent status createdAt"
+            })
 
         if (!employee) {
             return res.status(404).json({ success: false, message: "employee not found" })

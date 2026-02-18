@@ -19,7 +19,7 @@ router.get("/check-verify-email", VerifyhHRToken, RoleAuthorization("HR-Admin"),
 
 router.post("/logout", HandleHRLogout)
 
-router.post("/forgot-password", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleHRForgotPassword)
+router.post("/forgot-password", HandleHRForgotPassword)
 
 router.post("/reset-password/:token", HandleHRResetPassword)
 

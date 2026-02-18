@@ -31,7 +31,7 @@ export const ResetHRVerifyEmailPage = () => {
     useEffect(() => {
         if (HRState.isVerified) {
             loadingbar.current.complete()
-            navigate("/auth/HR/dashboard")
+            navigate("/HR/dashboard/dashboard-data")
         }
 
         if (HRState.isVerifiedEmailAvailable) {

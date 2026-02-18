@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
+import { apiService } from "../apis/APIService";
 import { EmployeesIDsEndPoints } from "../apis/APIsEndpoints";
+
+const getErrorPayload = (error) => (
+    error?.response?.data || { success: false, message: error?.message || "Network error" }
+)
 
 export const fetchEmployeesIDs = createAsyncThunk("fetchEmployeesIDs", async (fetchdata, { rejectWithValue }) => {
     try {
@@ -10,6 +14,6 @@ export const fetchEmployeesIDs = createAsyncThunk("fetchEmployeesIDs", async (fe
         })
         return response.data
     } catch (error) {
-        return rejectWithValue(error.response.data)
+        return rejectWithValue(getErrorPayload(error))
     }
 })

@@ -144,18 +144,18 @@ export const DataTable = ({ noticedata }) => {
         // },
     ]
 
-    if (noticedata) {
-        for (let index = 0; index < noticedata.notices.length; index++) {
+    const notices = Array.isArray(noticedata?.notices) ? noticedata.notices : []
+
+    for (let index = 0; index < notices.length; index++) {
             console.log("This is notice data", noticedata.notices)
             Notices.push(
                 {
                     noticeID: index + 1,
-                    noticeTitle: noticedata.notices[index].title,
-                    noticeAudience: noticedata.notices[index].audience,
-                    noticeCreatedBy: `${noticedata.notices[index].createdby["firstname"]} ${noticedata.notices[index].createdby["lastname"]}`,
+                    noticeTitle: notices[index]?.title || "-",
+                    noticeAudience: notices[index]?.audience || "-",
+                    noticeCreatedBy: `${notices[index]?.createdby?.firstname || ""} ${notices[index]?.createdby?.lastname || ""}`.trim() || "-",
                 }
             )
-        }
     }
 
     console.log("Notice array", Notices)

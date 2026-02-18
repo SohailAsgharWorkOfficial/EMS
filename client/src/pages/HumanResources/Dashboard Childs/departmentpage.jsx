@@ -1,4 +1,4 @@
-import { HRDepartmentTabs } from "../../../components/common/Dashboard/departmenttabs"
+import { HRDepartmentTabs } from "../../../components/common/Dashboard/departmentTabs.jsx"
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from "react"
 import { CreateDepartmentDialogBox } from "../../../components/common/Dashboard/dialogboxes"

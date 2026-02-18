@@ -21,24 +21,28 @@ import { ConnectDB } from './config/connectDB.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors"
 
-
 dotenv.config()
 const app = express();
 app.use(bodyParser.json())
 app.use(cookieParser())
 
+const allowedOrigins = [
+  process.env.CLIENT_URL,
+  "http://localhost:5173",
+  "http://127.0.0.1:5173",
+].filter(Boolean)
 
 app.use(cors({
-  origin: process.env.CLIENT_URL, // Adjust this to match your front-end origin exactly
-  credentials: true, // This is optional and depends on whether you’re using cookies
+  origin: allowedOrigins,
+  credentials: true,
 }));
 // app.options('*', cors())
 
-app.use("/api/auth/employee", EmployeeAuthRouter) 
+app.use("/api/auth/employee", EmployeeAuthRouter)
 
 app.use("/api/auth/HR", HRAuthrouter)
 
-app.use("/api/v1/dashboard", DashboardRouter) 
+app.use("/api/v1/dashboard", DashboardRouter)
 
 app.use("/api/v1/employee", EmployeeRouter)
 

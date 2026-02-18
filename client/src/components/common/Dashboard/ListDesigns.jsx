@@ -14,7 +14,7 @@ export const HeadingBar = ({ table_layout, table_headings }) => {
     return (
         <div className={`heading-container grid min-[250px]:grid-cols-2 sm:${table_layout ? table_layout : `grid-cols-5`} rounded-lg gap-4 overflow-auto`}>
             {
-                table_headings.map((item) => <div className={`heading-content text-white bg-blue-800 font-bold min-[250px]:text-xs xl:text-xl min-[250px]:p-1 sm:p-2 rounded-lg text-center flex justify-center items-center 
+                table_headings.map((item) => <div key={item} className={`heading-content text-white bg-blue-800 font-bold min-[250px]:text-xs xl:text-xl min-[250px]:p-1 sm:p-2 rounded-lg text-center flex justify-center items-center 
                 ${(["Email", "Department", "Contact Number"].includes(item)) ? `min-[250px]:hidden sm:flex` : ""}`}>
                     {item}
                 </div>)
@@ -34,7 +34,7 @@ export const ListContainer = ({ children }) => {
 export const ListItems = ({ TargetedState }) => {
     return (
         <>
-            {TargetedState.data ? TargetedState.data.map((item) => <div className={`list-item-container grid min-[250px]:grid-cols-2 sm:grid-cols-5 py-1 gap-2 justify-center items-center border-b-2 border-blue-800`}>
+            {TargetedState.data ? TargetedState.data.map((item) => <div key={item._id} className={`list-item-container grid min-[250px]:grid-cols-2 sm:grid-cols-5 py-1 gap-2 justify-center items-center border-b-2 border-blue-800`}>
                 <div className="heading-content font-bold min-[250px]:text-sm sm:text-xs lg:text-sm xl:text-lg p-2 rounded-lg text-start overflow-hidden text-ellipsis">
                     {`${item.firstname} ${item.lastname}`}
                 </div>
@@ -62,7 +62,7 @@ export const DepartmentListItems = ({ TargetedState }) => {
     console.log("this is targeted state", TargetedState)
     return (
         <>
-            {TargetedState ? TargetedState.employees.map((item) => <div className={`list-item-container grid min-[250px]:grid-cols-2 sm:grid-cols-4 py-1 gap-2 justify-center items-center border-b-2 border-blue-800`}>
+            {TargetedState ? TargetedState.employees.map((item) => <div key={item._id} className={`list-item-container grid min-[250px]:grid-cols-2 sm:grid-cols-4 py-1 gap-2 justify-center items-center border-b-2 border-blue-800`}>
                 <div className="heading-content font-bold min-[250px]:text-sm sm:text-xs lg:text-sm xl:text-lg p-2 rounded-lg text-center overflow-hidden text-ellipsis">
                     {`${item.firstname} ${item.lastname}`}
                 </div>

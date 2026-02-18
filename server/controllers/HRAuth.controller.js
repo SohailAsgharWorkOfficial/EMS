@@ -159,7 +159,7 @@ export const HandleHRCheck = async (req, res) => {
 export const HandleHRForgotPassword = async (req, res) => {
     const { email } = req.body
     try {
-        const HR = await HumanResources.findOne({ email: email, organizationID: req.ORGID, _id: req.HRid })
+        const HR = await HumanResources.findOne({ email: email })
 
         if (!HR) {
             return res.status(404).json({ success: false, message: "HR Email Does Not Exist Please Enter Correct One", type: "HRforgotpassword" })
@@ -243,7 +243,7 @@ export const HandleHRcheckVerifyEmail = async (req, res) => {
         const HR = await HumanResources.findOne({ _id: req.HRid, organizationID: req.ORGID })
 
         if (HR.isverified) {
-            return res.status(200).json({ sucess: true, message: "HR Already Verified", type: "HRcodeavailable", alreadyverified: true })
+            return res.status(200).json({ success: true, message: "HR Already Verified", type: "HRcodeavailable", alreadyverified: true })
         }
 
         if ((HR.verificationtoken) && (HR.verificationtokenexpires > Date.now())) {

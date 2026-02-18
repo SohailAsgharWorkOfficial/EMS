@@ -4,10 +4,8 @@ import { DataTable } from "../../../components/common/Dashboard/datatable.jsx"
 import { useEffect } from "react"
 import { HandleGetDashboard } from "../../../redux/Thunks/DashboardThunk.js"
 import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from "react-router-dom"
 import { Loading } from "../../../components/common/loading.jsx"
 export const HRDashboardPage = () => {
-    console.log("Reloaded")
     const DashboardState = useSelector((state) => state.dashboardreducer)
     const dispatch = useDispatch()
     const DataArray = [
@@ -29,13 +27,13 @@ export const HRDashboardPage = () => {
         {
             image: "/../../src/assets/HR-Dashboard/request.png",
             dataname: "requestes",
-            path: "/HR/dashboard/requestes"
+            path: "/HR/dashboard/requests"
         }
     ]
 
     useEffect(() => {
         dispatch(HandleGetDashboard({ apiroute: "GETDATA" }))
-    },[])
+    }, [dispatch])
 
     if (DashboardState.isLoading) { 
         return (

@@ -1,5 +1,5 @@
 import { createAsyncThunk } from '@reduxjs/toolkit'
-import { apiService } from '../apis/apiService'
+import { apiService } from '../apis/APIService'
 import { APIsEndPoints } from '../apis/APIsEndpoints.js'
 
 
@@ -40,3 +40,4 @@ export const HandlePutEmployees = createAsyncThunk()
 export const HandlePatchEmployees = createAsyncThunk()
 
 export const HandleDeleteEmployees = createAsyncThunk()
+

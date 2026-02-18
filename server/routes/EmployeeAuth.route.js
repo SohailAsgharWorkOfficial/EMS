@@ -18,7 +18,7 @@ router.get("/check-login", VerifyEmployeeToken, HandleEmployeeCheck)
 
 router.post("/logout", HandleEmplyoeeLogout)
 
-router.post("/forgot-password", VerifyEmployeeToken, HandleEmplyoeeForgotPassword)
+router.post("/forgot-password", HandleEmplyoeeForgotPassword)
 
 router.post("/reset-password/:token", HandleEmplyoeeSetPassword)
 

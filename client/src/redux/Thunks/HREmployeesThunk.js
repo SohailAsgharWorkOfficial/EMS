@@ -1,6 +1,10 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import { apiService } from "../apis/apiService";
+import { apiService } from "../apis/APIService";
 import { HREmployeesPageEndPoints } from "../apis/APIsEndpoints";
+
+const getErrorPayload = (error) => (
+    error?.response?.data || { success: false, message: error?.message || "Network error" }
+)
 
 export const HandleGetHREmployees = createAsyncThunk('HandleGetHREmployees', async (HREmployeeData, { rejectWithValue }) => {
     try {
@@ -12,7 +16,7 @@ export const HandleGetHREmployees = createAsyncThunk('HandleGetHREmployees', asy
     }
 
     catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 }) 
 
@@ -24,7 +28,7 @@ export const HandlePostHREmployees = createAsyncThunk('HandlePostHREmploy', asyn
         })
         return response.data
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 })
 
@@ -39,6 +43,6 @@ export const HandleDeleteHREmployees = createAsyncThunk("HandleDeleteHREmployees
             return response.data
         }
     } catch (error) {
-        return rejectWithValue(error.response.data);
+        return rejectWithValue(getErrorPayload(error));
     }
 })

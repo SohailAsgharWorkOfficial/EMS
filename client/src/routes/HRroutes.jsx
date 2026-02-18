@@ -12,6 +12,7 @@ import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashbo
 import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
 import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
 import { HRDepartmentPage } from "../pages/HumanResources/Dashboard Childs/departmentpage.jsx"
+import { HRSalariesPage, HRNoticesPage, HRLeavesPage, HRAttendancesPage, HRRecruitmentPage, HRInterviewInsightsPage, HRRequestsPage, HRProfilesPage } from "../pages/HumanResources/Dashboard Childs/hrmodules.jsx"
 export const HRRoutes = [
     {
         path: "/auth/HR/signup",
@@ -23,7 +24,7 @@ export const HRRoutes = [
     },
     {
         path: "/HR/dashboard",
-        element: <HRDashbaord />,
+        element: <HRProtectedRoutes><HRDashbaord /></HRProtectedRoutes>,
         children: [
             {
                 path: "/HR/dashboard/dashboard-data",
@@ -36,6 +37,38 @@ export const HRRoutes = [
             {
                 path: "/HR/dashboard/departments",
                 element: <HRDepartmentPage />
+            },
+            {
+                path: "/HR/dashboard/salaries",
+                element: <HRSalariesPage />
+            },
+            {
+                path: "/HR/dashboard/notices",
+                element: <HRNoticesPage />
+            },
+            {
+                path: "/HR/dashboard/leaves",
+                element: <HRLeavesPage />
+            },
+            {
+                path: "/HR/dashboard/attendances",
+                element: <HRAttendancesPage />
+            },
+            {
+                path: "/HR/dashboard/recruitment",
+                element: <HRRecruitmentPage />
+            },
+            {
+                path: "/HR/dashboard/interview-insights",
+                element: <HRInterviewInsightsPage />
+            },
+            {
+                path: "/HR/dashboard/requests",
+                element: <HRRequestsPage />
+            },
+            {
+                path: "/HR/dashboard/hr-profiles",
+                element: <HRProfilesPage />
             }
         ]
     },

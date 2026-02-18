@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useSelector, useDispatch } from "react-redux"
 import { HandleGetHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk"
+import { HandlePatchHRDepartments, HandleDeleteHRDepartments } from "../../../redux/Thunks/HRDepartmentPageThunk"
 import { Loading } from "../loading.jsx"
 import { HeadingBar } from "./ListDesigns.jsx"
 import { DepartmentListItems } from "./ListDesigns.jsx"
@@ -54,18 +55,18 @@ export const HRDepartmentTabs = () => {
     const { toast } = useToast()
     const HRDepartmentState = useSelector((state) => state.HRDepartmentPageReducer)
     const dispatch = useDispatch()
-    const [department, setdepartment] = useState("All Departments")
+    const [selectedDepartmentId, setSelectedDepartmentId] = useState("all")
 
-    const departments = []
+    const departments = Array.isArray(HRDepartmentState.data)
+        ? HRDepartmentState.data.map((item) => ({
+            value: item._id,
+            label: item.name
+        }))
+        : []
 
-    if (HRDepartmentState.data) {
-        for (let index = 0; index < HRDepartmentState.data.length; index++) {
-            departments.push({
-                value: HRDepartmentState.data[index].name,
-                label: HRDepartmentState.data[index].name
-            })
-        }
-    }
+    const currentDepartmentData = selectedDepartmentId === "all"
+        ? null
+        : (HRDepartmentState.data || []).find((item) => item._id === selectedDepartmentId)
 
     useEffect(() => {
         if (HRDepartmentState.fetchData) {
@@ -92,12 +93,19 @@ export const HRDepartmentTabs = () => {
 
         console.log("test message")
 
-    }, [HRDepartmentState.fetchData, HRDepartmentState.error, HRDepartmentState.success])
+    }, [HRDepartmentState.fetchData, HRDepartmentState.error, HRDepartmentState.success, dispatch, toast])
 
 
     useEffect(() => {
         dispatch(HandleGetHRDepartments({ apiroute: "GETALL" }))
-    }, [])
+    }, [dispatch])
+
+    useEffect(() => {
+        if (selectedDepartmentId === "all") return
+        if (!currentDepartmentData) {
+            setSelectedDepartmentId("all")
+        }
+    }, [selectedDepartmentId, currentDepartmentData])
 
 
     if (HRDepartmentState.isLoading) {
@@ -111,10 +119,10 @@ export const HRDepartmentTabs = () => {
             <div className="Dropdown-container flex justify-between items-center">
                 <div className="drop-down-select flex items-center gap-2 min-[250px]:flex-col sm:flex-row">
                     <h1 className="font-bold sm:text-sm lg:text-lg min-[250px]:hidden sm:flex">Department : </h1>
-                    <ComboDropDown DepartmentData={departments} CurrentDepartment={department} SetCurrentDepartment={setdepartment} />
+                    <ComboDropDown DepartmentData={departments} CurrentDepartment={selectedDepartmentId} SetCurrentDepartment={setSelectedDepartmentId} />
                 </div>
                 <div className="update-delete-department">
-                    {department !== "All Departments" ?
+                    {currentDepartmentData ?
                         <DropdownMenu>
                             <DropdownMenuTrigger>
                                 <Button className="bg-blue-700 hover:bg-blue-900">
@@ -124,11 +132,42 @@ export const HRDepartmentTabs = () => {
                             <DropdownMenuContent className="flex flex-col justify-center items-center p-2">
                                 {/* <DropdownMenuLabel>Update or Delete The Department</DropdownMenuLabel> */}
                                 <div className="buttons flex flex-col gap-2">
-                                    <Button className="bg-blue-700 text-white font-bold text-sm hover:bg-blue-900">
+                                    <Button
+                                        className="bg-blue-700 text-white font-bold text-sm hover:bg-blue-900"
+                                        onClick={() => {
+                                            const updatedName = window.prompt("Enter updated department name", currentDepartmentData.name)
+                                            const updatedDescription = window.prompt("Enter updated department description", currentDepartmentData.description)
+                                            if (!updatedName || !updatedDescription) return
+                                            dispatch(HandlePatchHRDepartments({
+                                                apiroute: "UPDATE",
+                                                data: {
+                                                    departmentID: currentDepartmentData._id,
+                                                    UpdatedDepartment: {
+                                                        name: updatedName.trim(),
+                                                        description: updatedDescription.trim(),
+                                                    }
+                                                }
+                                            }))
+                                        }}
+                                    >
                                         <img src="../../src/assets/HR-Dashboard/update.png" alt="" className="w-5" />
                                         Update
                                     </Button>
-                                    <Button className="bg-red-700 text-white font-bold text-sm hover:bg-red-900">
+                                    <Button
+                                        className="bg-red-700 text-white font-bold text-sm hover:bg-red-900"
+                                        onClick={() => {
+                                            const confirmed = window.confirm(`Delete ${currentDepartmentData.name} department?`)
+                                            if (!confirmed) return
+                                            dispatch(HandleDeleteHRDepartments({
+                                                apiroute: "DELETE",
+                                                data: {
+                                                    departmentID: currentDepartmentData._id,
+                                                    action: "delete-department"
+                                                }
+                                            }))
+                                            setSelectedDepartmentId("all")
+                                        }}
+                                    >
                                         <img src="../../src/assets/HR-Dashboard/delete.png" alt="" className="w-5" />
                                         Delete
                                     </Button>
@@ -139,8 +178,9 @@ export const HRDepartmentTabs = () => {
             </div>
             <div className={`department-container min-[250px]:px-1 sm:px-4 rounded-lg flex flex-col gap-4 h-[100%]`}>
                 {
-                    department === "All Departments" ? <AllDepartments DepartmentData={HRDepartmentState} SetCurrentDepartment={setdepartment} /> :
-                        <DepartmentContent CurrentDepartmentData={HRDepartmentState.data ? HRDepartmentState.data.find((item) => item.name == department) : null} />
+                    selectedDepartmentId === "all"
+                        ? <AllDepartments DepartmentData={HRDepartmentState} SetCurrentDepartment={setSelectedDepartmentId} />
+                        : (currentDepartmentData ? <DepartmentContent CurrentDepartmentData={currentDepartmentData} /> : null)
                 }
             </div>
         </div>
@@ -153,6 +193,10 @@ export const ComboDropDown = ({ DepartmentData, CurrentDepartment, SetCurrentDep
 
     const [open, setOpen] = useState(false)
 
+    const currentDepartmentLabel = CurrentDepartment === "all"
+        ? "All Departments"
+        : (DepartmentData.find((item) => item.value === CurrentDepartment)?.label || "All Departments")
+
     return (
         <div className="departments-container">
             <Popover open={open} onOpenChange={setOpen}>
@@ -163,7 +207,7 @@ export const ComboDropDown = ({ DepartmentData, CurrentDepartment, SetCurrentDep
                         aria-expanded={open}
                         className="w-auto justify-between"
                     >
-                        {CurrentDepartment}
+                        {currentDepartmentLabel}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                     </Button>
                 </PopoverTrigger>
@@ -178,8 +222,7 @@ export const ComboDropDown = ({ DepartmentData, CurrentDepartment, SetCurrentDep
                                         key={department.value}
                                         value={department.value}
                                         onSelect={(currentValue) => {
-                                            console.log("this is the current value", currentValue)
-                                            SetCurrentDepartment(currentValue === CurrentDepartment ? "All Departments" : currentValue)
+                                            SetCurrentDepartment(currentValue === CurrentDepartment ? "all" : currentValue)
                                             setOpen(false)
                                         }}
                                     >
@@ -244,10 +287,10 @@ export const DepartmentContent = ({ CurrentDepartmentData }) => {
 export const AllDepartments = ({ DepartmentData, SetCurrentDepartment }) => {
     return (
         <>
-            {DepartmentData.data ? DepartmentData.data.map((department) => <div key={department.name} className="department-data border-2 border-blue-700 p-4 rounded-lg flex flex-col gap-4">
+            {DepartmentData.data ? DepartmentData.data.map((department) => <div key={department._id} className="department-data border-2 border-blue-700 p-4 rounded-lg flex flex-col gap-4">
                 <div className="department-heading-description flex justify-between items-center min-[250px]:items-center sm:items-start">
                     <h1 className="font-bold min-[250px]:text-xl sm:text-2xl lg:text-4xl">{department.name}</h1>
-                    <Button className="bg-blue-700 border-2 border-blue-700 text-white font-bold hover:bg-white hover:text-blue-700" onClick={() => SetCurrentDepartment(department.name)}>View</Button>
+                    <Button className="bg-blue-700 border-2 border-blue-700 text-white font-bold hover:bg-white hover:text-blue-700" onClick={() => SetCurrentDepartment(department._id)}>View</Button>
                 </div>
                 <p className="font-bold min-[250px]:text-xs  sm:text-sm lg:text-lg min-[250px]:text-center sm:text-start">
                     {department.description}

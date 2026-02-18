@@ -37,6 +37,9 @@ export const HREmployeesPage = () => {
                 </div>
             </div>
             <div className="employees-data flex flex-col gap-4 md:pe-5 overflow-auto">
+                {HREmployeesState.error.status ? (
+                    <p className="text-red-700 font-bold">{HREmployeesState.error.message || "Failed to fetch employees"}</p>
+                ) : null}
                 <ListWrapper>
                     <HeadingBar table_layout={"grid-cols-5"} table_headings={table_headings} />
                 </ListWrapper>

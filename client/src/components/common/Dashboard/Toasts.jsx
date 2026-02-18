@@ -1,58 +1,53 @@
 import { useToast } from "../../../hooks/use-toast.js"
 import { Button } from "@/components/ui/button"
-import { ToastAction } from "@/components/ui/toast"
-import { useSelector, useDispatch } from "react-redux"
-import { useEffect, useRef } from "react"
+import { useDispatch } from "react-redux"
 import { HandlePostHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
+import { HandleGetHREmployees } from "../../../redux/Thunks/HREmployeesThunk.js"
 export const FormSubmitToast = ({ formdata }) => {
     const { toast } = useToast()
     const dispatch = useDispatch()
-    const HREmployeesState = useSelector((state) => state.HREmployeesPageReducer)
 
 
     const SubmitFormData = async () => {
-        dispatch(HandlePostHREmployees({ apiroute: "ADDEMPLOYEE", data: formdata })) 
+        if (!formdata.firstname || !formdata.lastname || !formdata.email || !formdata.contactnumber || !formdata.textpassword || !formdata.password) {
+            toast({
+                variant: "destructive",
+                title: "Missing fields",
+                description: "Please fill all employee fields.",
+            })
+            return
+        }
+
+        if (formdata.textpassword !== formdata.password) {
+            toast({
+                variant: "destructive",
+                title: "Password mismatch",
+                description: "Password and confirm password must match.",
+            })
+            return
+        }
+
+        try {
+            const result = await dispatch(HandlePostHREmployees({ apiroute: "ADDEMPLOYEE", data: formdata })).unwrap()
+            toast({
+                title: "Success",
+                description: result?.message || "Employee added successfully.",
+            })
+            dispatch(HandleGetHREmployees({ apiroute: "GETALL" }))
+        } catch (error) {
+            toast({
+                variant: "destructive",
+                title: "Failed",
+                description: error?.message || "Employee create failed.",
+            })
+        }
     }
-
-    // const DisplayToast = () => {
-    //     if (HREmployeesState.error.status) {
-    //         return toast({
-    //             variant: "destructive",
-    //             title: "Uh oh! Something went wrong.",
-    //             description: `${HREmployeesState.error.message}`,
-    //             // action: <ToastAction altText="Try again">Try again</ToastAction>,
-    //         })
-    //     } else if (HREmployeesState.fetchData) {
-    //         return toast({
-    //             title: <p className="text-xl m-1">Success!</p>,
-    //             description: <div className="flex justify-center items-center gap-2">
-    //                 <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-8" />
-    //                 <p className="font-bold">Employee added successfully.</p>
-    //             </div>,
-    //         })
-    //     }
-    // }
-
-    console.log(HREmployeesState, "This is the HR plus Employees State")
     return (
         <>
             <Button
                 variant="outline"
                 onClick={() => {
                     SubmitFormData()
-                    // HREmployeesState.error.status ? toast({
-                    //     variant: "destructive",
-                    //     title: "Uh oh! Something went wrong.",
-                    //     description: `${HREmployeesState.error.message}`,
-                    //     // action: <ToastAction altText="Try again">Try again</ToastAction>,
-                    // }) : null
-                    // HREmployeesState.fetchData ? toast({
-                    //     title: <p className="text-xl m-1">Success!</p>,
-                    //     description: <div className="flex justify-center items-center gap-2">
-                    //         <img src="../../src/assets/HR-Dashboard/correct.png" alt="" className="w-8" />
-                    //         <p className="font-bold">Employee added successfully.</p>
-                    //     </div>,
-                    // }) : null
                 }}
                 className="bg-blue-800 border-2 border-blue-800 px-4 py-2 text-white font-bold rounded-lg hover:bg-white hover:text-blue-800"
             >

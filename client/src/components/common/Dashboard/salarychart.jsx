@@ -17,16 +17,16 @@ import {
 } from "@/components/ui/chart"
 export const SalaryChart = ({ balancedata }) => {
     const chartData = []
-    if (balancedata) {
-        for (let index = 0; index < balancedata.balance.length; index++) {
+    const balances = Array.isArray(balancedata?.balance) ? balancedata.balance : []
+
+    for (let index = 0; index < balances.length; index++) {
             chartData.push(
                 {
-                    month: balancedata.balance[index]["expensemonth"],
-                    SalriesPaid: balancedata.balance[index]["totalexpenses"],
-                    AvailableAmount: balancedata.balance[index]["availableamount"]
+                    month: balances[index]["expensemonth"],
+                    SalriesPaid: balances[index]["totalexpenses"],
+                    AvailableAmount: balances[index]["availableamount"]
                 }
             )
-        }
     }
     const chartConfig = {
         desktop: {
@@ -40,10 +40,13 @@ export const SalaryChart = ({ balancedata }) => {
     }
 
     let trendingUp = 0
-
-    if (balancedata) {
-        const difference = chartData[chartData.length - 1]["AvailableAmount"] - chartData[chartData.length - 2]["AvailableAmount"]
-        trendingUp += Math.round((difference * 100) / chartData[chartData.length - 2]["AvailableAmount"])
+    if (chartData.length >= 2) {
+        const latest = Number(chartData[chartData.length - 1]["AvailableAmount"]) || 0
+        const previous = Number(chartData[chartData.length - 2]["AvailableAmount"]) || 0
+        if (previous !== 0) {
+            const difference = latest - previous
+            trendingUp = Math.round((difference * 100) / previous)
+        }
     }
     return (
         <div className="salary-container flex flex-col min-[250px]:gap-3 sm:gap-1 h-auto">

@@ -1,27 +1,20 @@
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-// import { AppSidebar } from "@/components/app-sidebar"
 import { HRdashboardSidebar } from "../../components/ui/HRsidebar.jsx"
-import { Outlet } from "react-router-dom"
-import { useNavigate, useLocation } from "react-router-dom"
+import { Outlet, useNavigate, useLocation } from "react-router-dom"
 import { useEffect } from "react"
 
 export const HRDashbaord = () => {
     const location = useLocation()
     const navigate = useNavigate()
-    const pathArray = location.pathname.split("/")
-
 
     useEffect(() => {
-        navigate(`/HR/dashboard/${pathArray[pathArray.length - 1]}`)
-    }, [])
-
-
-    console.log("this is the current path location", location)
-
+        if (location.pathname === "/HR/dashboard") {
+            navigate("/HR/dashboard/dashboard-data", { replace: true })
+        }
+    }, [location.pathname, navigate])
 
     return (
         <div className="HR-dashboard-container flex">
-
             <div className="HRDashboard-sidebar">
                 <SidebarProvider>
                     <HRdashboardSidebar />
