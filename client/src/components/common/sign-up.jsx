@@ -157,6 +157,9 @@ export const SignUP = ({ handlesignupform, handlesubmitform, stateformdata, erro
                 
                 
                 <div className="form-button-group w-full grid grid-cols-1 gap-5">
+                    <div className="flex items-center min-[250px]:justify-center sm:justify-start">
+                        <img src="/ems-logo.png" alt="EMS logo" className="h-12 w-12 object-contain" />
+                    </div>
 
                     <div className="form-container grid min-[250px]:grid-cols-1 sm:grid-cols-2 w-full min-[250px]:gap-3 sm:gap-10 justify-center items-center">
 

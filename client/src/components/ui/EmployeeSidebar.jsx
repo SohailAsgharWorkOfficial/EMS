@@ -2,6 +2,7 @@ import {
     Sidebar,
     SidebarContent,
     SidebarGroup,
+    SidebarHeader,
     SidebarGroupContent,
     SidebarMenu,
     SidebarMenuButton,
@@ -17,12 +18,17 @@ export function EmployeeSidebar() {
         } catch {
             // Redirect regardless.
         } finally {
-            window.location.href = "/auth/employee/login"
+            window.location.href = "/"
         }
     }
 
     return (
         <Sidebar>
+            <SidebarHeader className="border-b border-slate-200 p-3">
+                <div className="flex items-center">
+                    <img src="/ems-logo.png" alt="EMS logo" className="h-9 w-9 object-contain" />
+                </div>
+            </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     <SidebarGroupContent>

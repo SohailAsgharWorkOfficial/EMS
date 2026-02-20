@@ -22,25 +22,48 @@ export const HRLogin = () => {
 
     const handlesigninsubmit = (e) => {
         e.preventDefault();
-        loadingbar.current.continuousStart();
+        loadingbar.current?.continuousStart();
         dispatch(HandlePostHumanResources({ apiroute: "LOGIN", data: signinform }))
 
     }
 
-    if (HRState.error.status) {
-        loadingbar.current.complete()
-    }
+    useEffect(() => {
+        if (HRState.error.status) {
+            loadingbar.current?.complete()
+        }
+    }, [HRState.error.status])
 
     useEffect(() => {
-        if (!HRState.isAuthenticated) {
-            dispatch(HandleGetHumanResources({ apiroute: "CHECKLOGIN" }))
+        if (!HRState.isAuthenticated) return
+
+        if (HRState.isVerified) {
+            loadingbar.current?.complete()
+            navigate("/HR/dashboard/dashboard-data", { replace: true })
+            return
         }
 
-        if (HRState.isAuthenticated) {
-            loadingbar.current.complete()
-            navigate("/HR/dashboard/dashboard-data")
+        if (HRState.data?.type === "HRcodeavailable") {
+            loadingbar.current?.complete()
+            if (HRState.data?.alreadyverified) {
+                navigate("/HR/dashboard/dashboard-data", { replace: true })
+            } else {
+                navigate("/auth/HR/reset-email-validation", { replace: true })
+            }
+            return
         }
-    }, [HRState.isAuthenticated])
+
+        if (!HRState.isLoading) {
+            dispatch(HandleGetHumanResources({ apiroute: "CHECK_VERIFY_EMAIL" }))
+        }
+    }, [
+        dispatch,
+        navigate,
+        HRState.isAuthenticated,
+        HRState.isVerified,
+        HRState.isLoading,
+        HRState.data?.type,
+        HRState.data?.alreadyverified,
+    ])
 
 
     return (

@@ -1,11 +1,9 @@
 import {
     Sidebar,
     SidebarContent,
-    SidebarFooter,
     SidebarGroup,
     SidebarHeader,
     SidebarGroupContent,
-    SidebarGroupLabel,
     SidebarMenu,
     SidebarMenuButton,
     SidebarMenuItem,
@@ -18,15 +16,20 @@ export function HRdashboardSidebar() {
     const logoutHR = async () => {
         try {
             await apiService.post("/api/auth/HR/logout")
-        } catch (error) {
-            // Navigate to login even if API fails; local auth state will reset on reload.
+        } catch {
+            // Navigate to home even if API fails; local auth state will reset on reload.
         } finally {
-            window.location.href = "/auth/HR/login"
+            window.location.href = "/"
         }
     }
 
     return (
         <Sidebar>
+            <SidebarHeader className="border-b border-slate-200 p-3">
+                <div className="flex items-center">
+                    <img src="/ems-logo.png" alt="EMS logo" className="h-9 w-9 object-contain" />
+                </div>
+            </SidebarHeader>
             <SidebarContent>
                 <SidebarGroup>
                     {/* <SidebarGroupLabel>HR-Dashboard EMS</SidebarGroupLabel> */}

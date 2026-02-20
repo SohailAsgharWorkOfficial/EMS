@@ -1,5 +1,9 @@
 import jwt from 'jsonwebtoken'
 
+const isJwtAuthError = (error) => {
+    return error?.name === "TokenExpiredError" || error?.name === "JsonWebTokenError" || error?.name === "NotBeforeError"
+}
+
 export const VerifyEmployeeToken = (req, res, next) => {
     const token = req.cookies.EMtoken
     if (!token) {
@@ -16,7 +20,11 @@ export const VerifyEmployeeToken = (req, res, next) => {
         req.ORGID = decoded.ORGID
         next()
     } catch (error) {
-        return res.status(500).json({ success: false, message: "internal server error", error: error }) 
+        if (isJwtAuthError(error)) {
+            res.clearCookie("EMtoken")
+            return res.status(401).json({ success: false, message: "Unauthorized access", gologin: true })
+        }
+        return res.status(500).json({ success: false, message: "internal server error", error: error })
     }
 }
 
@@ -36,6 +44,10 @@ export const VerifyhHRToken = (req, res, next) => {
         req.Role = decoded.HRrole
         next()
     } catch (error) {
-        return res.status(500).json({ success: false, message: "internal server error", error: error }) 
+        if (isJwtAuthError(error)) {
+            res.clearCookie("HRtoken")
+            return res.status(401).json({ success: false, message: "Unauthorized access", gologin: true })
+        }
+        return res.status(500).json({ success: false, message: "internal server error", error: error })
     }
 }

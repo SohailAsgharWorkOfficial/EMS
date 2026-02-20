@@ -23,19 +23,21 @@ export const EmployeeLogin = () => {
 
     const handlesigninsubmit = async (e) => {
         e.preventDefault();
-        loadingbar.current.continuousStart();
+        loadingbar.current?.continuousStart();
         dispatch(HandlePostEmployees({ apiroute: "LOGIN", data: signinform }))
     }
 
 
     const RedirectToDashbaord = () => {
-        loadingbar.current.complete()
+        loadingbar.current?.complete()
         navigate("/auth/employee/employee-dashboard")
     }
 
-    if (EmployeeState.error.status) {
-        loadingbar.current.complete()
-    }
+    useEffect(() => {
+        if (EmployeeState.error.status) {
+            loadingbar.current?.complete()
+        }
+    }, [EmployeeState.error.status])
 
     useEffect(() => {
         if (!EmployeeState.isAuthenticated) {

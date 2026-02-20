@@ -111,11 +111,20 @@ export const HandleHRVerifyEmail = async (req, res) => {
 
 
 export const HandleHRLogin = async (req, res) => {
-    const { email, password } = req.body
+    const email = req.body?.email?.trim()
+    const password = req.body?.password
     try {
+        if (!email || !password) {
+            return res.status(400).json({ success: false, message: "Email and Password are required", type: "HRLogin" })
+        }
+
         const HR = await HumanResources.findOne({ email: email })
 
         if (!HR) {
+            return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
+        }
+
+        if (!HR.password || typeof HR.password !== "string") {
             return res.status(400).json({ success: false, message: "Invaild Credentials, Please Add Correct One", type: "HRLogin" })
         }
 
@@ -131,6 +140,9 @@ export const HandleHRLogin = async (req, res) => {
         return res.status(200).json({ success: true, message: "HR Login Successfull", type: "HRLogin" })
     }
     catch (error) {
+        if (error?.name === "MongooseServerSelectionError") {
+            return res.status(503).json({ success: false, message: "Database connection failed", type: "HRLogin" })
+        }
         return res.status(500).json({ success: false, message: "Internal Server Error", error: error, type: "HRLogin" })
     }
 }
@@ -152,6 +164,9 @@ export const HandleHRCheck = async (req, res) => {
         }
         return res.status(200).json({ success: true, message: "HR Already Logged In", type: "checkHR" })
     } catch (error) {
+        if (error?.name === "MongooseServerSelectionError") {
+            return res.status(503).json({ success: false, message: "Database connection failed", type: "checkHR", gologin: true })
+        }
         return res.status(500).json({ success: false, error: error, message: "internal error", type: "checkHR" })
     }
 }

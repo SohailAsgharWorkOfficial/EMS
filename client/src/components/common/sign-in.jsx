@@ -15,6 +15,9 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                     />
                 </div>
                 <div className="my-5 sm:mx-auto sm:w-full sm:max-w-sm lg:mx-10">
+                    <div className="mb-4 flex items-center justify-center">
+                        <img src="/ems-logo.png" alt="EMS logo" className="h-12 w-12 object-contain" />
+                    </div>
                     <h2 className="mb-5 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
                         Sign in to your account
                     </h2>
@@ -37,16 +40,14 @@ export const SignIn = ({ image, handlesigninform, handlesigninsubmit, targetedst
                             </div>
                         </div>
 
-                        <div> 
+                        <div>
                             <div className="flex items-center justify-between">
                                 <label htmlFor="password" className="block text-sm/6 font-medium text-gray-900">
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <Link to={redirectpath}>
-                                        <a className="font-semibold text-indigo-600 hover:text-indigo-500">
-                                            Forgot password? 
-                                        </a>
+                                    <Link to={redirectpath} className="font-semibold text-indigo-600 hover:text-indigo-500">
+                                        Forgot password?
                                     </Link>
                                 </div>
                             </div>

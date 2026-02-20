@@ -1,6 +1,6 @@
 import { HandleGetHumanResources } from "../redux/Thunks/HRThunk.js"
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import { Navigate } from "react-router-dom"
 import { useNavigate } from "react-router-dom"
 import { Loading } from "../components/common/loading.jsx"
@@ -11,27 +11,37 @@ export const HRProtectedRoutes = ({ children }) => {
     const HRState = useSelector((state) => state.HRReducer)
 
     useEffect(() => {
-        if (!HRState.isAuthenticated && !HRState.isAuthourized && !HRState.isVerified && !HRState.error.content) {
+        if (!HRState.isAuthenticated || !HRState.isAuthourized) {
             dispatch(HandleGetHumanResources({ apiroute: "CHECKLOGIN" }))
+            return
+        }
+
+        if (HRState.isAuthenticated && HRState.isAuthourized && !HRState.isVerified) {
             dispatch(HandleGetHumanResources({ apiroute: "CHECK_VERIFY_EMAIL" }))
         }
+    }, [dispatch, HRState.isAuthenticated, HRState.isAuthourized, HRState.isVerified])
 
-        if (HRState.isAuthenticated && HRState.isAuthourized && !HRState.isVerified && HRState.error.content) {
-            navigate("/auth/HR/reset-email-validation")
+    useEffect(() => {
+        if (HRState.isAuthenticated && HRState.isAuthourized && !HRState.isVerified && HRState.error.content?.type === "HRcodeavailable") {
+            navigate("/auth/HR/reset-email-validation", { replace: true })
+            return
         }
 
-        if (!HRState.isAuthenticated && !HRState.isAuthourized && !HRState.isVerified && HRState.error.content) {
-            navigate("/auth/HR/signup")
+        if (!HRState.isAuthenticated && HRState.error.content?.gologin) {
+            navigate("/auth/HR/login", { replace: true })
         }
-    }, [HRState.isAuthenticated, HRState.isAuthourized, HRState.isVerified, HRState.error.content])
+    }, [navigate, HRState.isAuthenticated, HRState.isAuthourized, HRState.isVerified, HRState.error.content])
 
-    if (HRState.isLoading) {
+    const isAllowed = HRState.isAuthenticated && HRState.isAuthourized && HRState.isVerified
+    const needsVerificationCheck = HRState.isAuthenticated && HRState.isAuthourized && !HRState.isVerified && !HRState.error.content
+
+    if (HRState.isLoading || needsVerificationCheck) {
         return (
             <Loading />
         )
     }
 
-    return (
-        (HRState.isAuthenticated && HRState.isAuthourized && HRState.isVerified) ? children : null
-    )
+    if (isAllowed) return children
+
+    return <Navigate to="/auth/HR/login" replace />
 }
