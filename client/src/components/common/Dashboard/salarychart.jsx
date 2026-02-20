@@ -16,24 +16,24 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 export const SalaryChart = ({ balancedata }) => {
-    const chartData = []
     const balances = Array.isArray(balancedata?.balance) ? balancedata.balance : []
+    const chartData = balances.map((item) => {
+        const monthValue = item?.expensemonth ?? item?.expenseMonth ?? item?.month ?? ""
+        const salariesPaid = Number(item?.totalexpenses ?? item?.totalExpenses ?? 0) || 0
+        const availableAmount = Number(item?.availableamount ?? item?.availableAmount ?? 0) || 0
 
-    for (let index = 0; index < balances.length; index++) {
-            chartData.push(
-                {
-                    month: balances[index]["expensemonth"],
-                    SalriesPaid: balances[index]["totalexpenses"],
-                    AvailableAmount: balances[index]["availableamount"]
-                }
-            )
-    }
+        return {
+            month: String(monthValue),
+            SalariesPaid: salariesPaid,
+            AvailableAmount: availableAmount,
+        }
+    })
     const chartConfig = {
-        desktop: {
+        SalariesPaid: {
             label: "Salaries Paid",
             color: "hsl(var(--chart-1))",
         },
-        mobile: {
+        AvailableAmount: {
             label: "Available Balance",
             color: "hsl(var(--chart-2))",
         },
@@ -48,6 +48,7 @@ export const SalaryChart = ({ balancedata }) => {
             trendingUp = Math.round((difference * 100) / previous)
         }
     }
+    const latestAvailableAmount = chartData.length > 0 ? chartData[chartData.length - 1]["AvailableAmount"] : 0
     return (
         <div className="salary-container flex flex-col min-[250px]:gap-3 sm:gap-1 h-auto">
             <div className="heading px-2 my-2 min-[250px]:px-3">
@@ -55,12 +56,15 @@ export const SalaryChart = ({ balancedata }) => {
             </div>
             <Card className="mx-2">
                 <CardHeader>
-                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">Available Salary Amount : {chartData.length > 0 ? chartData[chartData.length - 1]["AvailableAmount"] : 0}</CardTitle>
+                    <CardTitle className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">Available Salary Amount : {latestAvailableAmount.toLocaleString()}</CardTitle>
                     <CardDescription className="min-[250px]:text-xs sm:text-md md:text-lg lg:text-xl">
                         Salaries Chart
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
+                    {chartData.length === 0 ? (
+                        <p className="text-sm text-muted-foreground">No balance records found yet.</p>
+                    ) : null}
                     <ChartContainer config={chartConfig}>
                         <AreaChart
                             accessibilityLayer
@@ -76,7 +80,7 @@ export const SalaryChart = ({ balancedata }) => {
                                 tickLine={false}
                                 axisLine={false}
                                 tickMargin={8}
-                                tickFormatter={(value) => value.slice(0, 3)}
+                                tickFormatter={(value) => String(value || "").slice(0, 3)}
                             />
                             <ChartTooltip
                                 cursor={false}
@@ -84,19 +88,19 @@ export const SalaryChart = ({ balancedata }) => {
                                 className="p-[2px] flex gap-1 items-center min-[250px]:text-xs sm:text-xs"
                             />
                             <Area
-                                dataKey="SalriesPaid"
+                                dataKey="SalariesPaid"
                                 type="natural"
-                                fill="var(--color-mobile)"
+                                fill="var(--color-SalariesPaid)"
                                 fillOpacity={0.4}
-                                stroke="var(--color-mobile)"
+                                stroke="var(--color-SalariesPaid)"
                                 stackId="a"
                             />
                             <Area
                                 dataKey="AvailableAmount"
                                 type="natural"
-                                fill="var(--color-desktop)"
+                                fill="var(--color-AvailableAmount)"
                                 fillOpacity={0.4}
-                                stroke="var(--color-desktop)"
+                                stroke="var(--color-AvailableAmount)"
                                 stackId="a"
                             />
                             <ChartLegend content={<ChartLegendContent />} />
@@ -111,7 +115,7 @@ export const SalaryChart = ({ balancedata }) => {
                                 <TrendingUp className="h-4 w-4" />
                             </div>
                             <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                                {chartData.length > 0 ? `${chartData[0]["month"]} 2024 - ${chartData[chartData.length - 1]["month"]} 2024` : null}
+                                {chartData.length > 0 ? `${chartData[0]["month"]} - ${chartData[chartData.length - 1]["month"]}` : null}
                             </div>
                         </div>
                     </div>

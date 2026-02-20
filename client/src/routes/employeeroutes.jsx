@@ -6,6 +6,7 @@ import { ResetEmailConfirm } from "../pages/Employees/resetemailconfirm.jsx"
 import { ResetPassword } from "../pages/Employees/resetpassword.jsx"
 import { EntryPage } from "../pages/Employees/EntryPage.jsx"
 import { EmployeeDashboardHome, EmployeeSalariesPage, EmployeeNoticesPage, EmployeeLeavesPage, EmployeeAttendancePage, EmployeeRecruitmentPage, EmployeeInterviewInsightsPage, EmployeeRequestsPage } from "../pages/Employees/dashboardmodules.jsx"
+import { CareersApplyPage } from "../pages/common/careersapply.jsx"
 // import { VerifyEmailPage } from "../pages/common/verifyemailpage.jsx"
 
 export const EmployeeRoutes = [
@@ -16,6 +17,10 @@ export const EmployeeRoutes = [
     {
         path: "/auth/employee/login",
         element: <EmployeeLogin />
+    },
+    {
+        path: "/careers/apply",
+        element: <CareersApplyPage />
     },
     // {
     //     path: "/auth/employee/verify-email", 

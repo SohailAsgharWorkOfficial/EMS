@@ -12,7 +12,7 @@ import { HRDashboardPage } from "../pages/HumanResources/Dashboard Childs/dashbo
 import { HRProtectedRoutes } from "./HRprotectedroutes.jsx"
 import { HREmployeesPage } from "../pages/HumanResources/Dashboard Childs/employeespage.jsx"
 import { HRDepartmentPage } from "../pages/HumanResources/Dashboard Childs/departmentpage.jsx"
-import { HRSalariesPage, HRNoticesPage, HRLeavesPage, HRAttendancesPage, HRRecruitmentPage, HRInterviewInsightsPage, HRRequestsPage, HRProfilesPage } from "../pages/HumanResources/Dashboard Childs/hrmodules.jsx"
+import { HRSalariesPage, HRNoticesPage, HRLeavesPage, HRAttendancesPage, HRRecruitmentPage, HRApplicantsPage, HRInterviewInsightsPage, HRRequestsPage, HRProfilesPage } from "../pages/HumanResources/Dashboard Childs/hrmodules.jsx"
 export const HRRoutes = [
     {
         path: "/auth/HR/signup",
@@ -57,6 +57,10 @@ export const HRRoutes = [
             {
                 path: "/HR/dashboard/recruitment",
                 element: <HRRecruitmentPage />
+            },
+            {
+                path: "/HR/dashboard/applicants",
+                element: <HRApplicantsPage />
             },
             {
                 path: "/HR/dashboard/interview-insights",

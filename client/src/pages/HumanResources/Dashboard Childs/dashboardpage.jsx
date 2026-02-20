@@ -33,6 +33,21 @@ export const HRDashboardPage = () => {
 
     useEffect(() => {
         dispatch(HandleGetDashboard({ apiroute: "GETDATA" }))
+
+        const intervalID = setInterval(() => {
+            dispatch(HandleGetDashboard({ apiroute: "GETDATA" }))
+        }, 30000)
+
+        const handleFocus = () => {
+            dispatch(HandleGetDashboard({ apiroute: "GETDATA" }))
+        }
+
+        window.addEventListener("focus", handleFocus)
+
+        return () => {
+            clearInterval(intervalID)
+            window.removeEventListener("focus", handleFocus)
+        }
     }, [dispatch])
 
     if (DashboardState.isLoading) { 

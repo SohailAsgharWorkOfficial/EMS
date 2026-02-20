@@ -14,7 +14,7 @@ export function EmployeeSidebar() {
     const logoutEmployee = async () => {
         try {
             await apiService.post("/api/auth/employee/logout")
-        } catch (error) {
+        } catch {
             // Redirect regardless.
         } finally {
             window.location.href = "/auth/employee/login"
@@ -28,50 +28,72 @@ export function EmployeeSidebar() {
                     <SidebarGroupContent>
                         <SidebarMenu className="gap-3 p-2">
                             <NavLink to={"/auth/employee/employee-dashboard/dashboard-data"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
+                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg">
+                                    <img src="/../../src/assets/HR-Dashboard/dashboard.png" alt="" className="w-7 ms-2 my-1" />
                                     <button className="text-[16px]">Dashboard</button>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/salaries"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Salaries</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/salary.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Salaries</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/notices"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Issue Notices</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/notice.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Issue Notices</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/leaves"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Leaves</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/leave.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Leaves</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/attendances"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Attendances</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/attendance.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Attendances</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/recruitment"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Recruitment</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/recruitment.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Recruitment</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/interview-insights"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Interview Insights</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/interview-insights.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Interview Insights</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 
                             <NavLink to={"/auth/employee/employee-dashboard/requests"} className={({ isActive }) => (isActive ? "bg-blue-200 rounded-lg" : "")}>
-                                <SidebarMenuItem className="flex gap-4 hover:bg-blue-200 rounded-lg px-2 py-1">
-                                    <button className="text-[16px]">Requests</button>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/request.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Requests</button>
+                                    </SidebarMenuButton>
                                 </SidebarMenuItem>
                             </NavLink>
 

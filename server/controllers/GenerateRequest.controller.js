@@ -2,6 +2,9 @@ import { Department } from "../models/Department.model.js"
 import { Employee } from "../models/Employee.model.js"
 import { GenerateRequest } from "../models/GenerateRequest.model.js"
 
+const requestPopulation = "employee department approvedby"
+const requestPopulationSelect = "firstname lastname name"
+
 export const HandleCreateGenerateRequest = async (req, res) => {
     try {
         const { requesttitle, requestconent, employeeID } = req.body
@@ -26,7 +29,8 @@ export const HandleCreateGenerateRequest = async (req, res) => {
             requesttitle: requesttitle,
             requestconent: requestconent,
             employee: employeeID,
-            department: employee.department
+            department: employee.department,
+            organizationID: req.ORGID,
         })
 
         if (generaterequest) {
@@ -52,7 +56,9 @@ export const HandleCreateGenerateRequest = async (req, res) => {
 
 export const HandleAllGenerateRequest = async (req, res) => {
     try {
-        const requestes = await GenerateRequest.find({ organizationID: req.ORGID }).populate("employee department", "firstname lastname name")
+        const requestes = await GenerateRequest.find({ organizationID: req.ORGID })
+            .sort({ createdAt: -1 })
+            .populate(requestPopulation, requestPopulationSelect)
         return res.status(200).json({ success: true, message: "All requestes retrieved successfully", data: requestes })
     } catch (error) {
         return res.status(500).json({ success: false, message: "Internal Server Error", error: error })
@@ -62,7 +68,7 @@ export const HandleAllGenerateRequest = async (req, res) => {
 export const HandleGenerateRequest = async (req, res) => {
     try {
         const { requestID } = req.params
-        const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID }).populate("employee department", "firstname lastname name")
+        const request = await GenerateRequest.findOne({ _id: requestID, organizationID: req.ORGID }).populate(requestPopulation, requestPopulationSelect)
         if (!request) {
             return res.status(404).json({ success: false, message: "Request not found" })
         }
@@ -76,7 +82,16 @@ export const HandleGenerateRequest = async (req, res) => {
 export const HandleUpdateRequestByEmployee = async (req, res) => {
     try {
         const { requestID, requesttitle, requestconent } = req.body
-        const request = await GenerateRequest.findByIdAndUpdate(requestID, { requesttitle, requestconent }, { new: true })
+
+        if (!requestID || !requesttitle || !requestconent) {
+            return res.status(400).json({ success: false, message: "All fields are required" })
+        }
+
+        const request = await GenerateRequest.findOneAndUpdate(
+            { _id: requestID, employee: req.EMid, organizationID: req.ORGID },
+            { requesttitle, requestconent, status: "Pending" },
+            { new: true }
+        )
 
         if (!request) {
             return res.status(404).json({ success: false, message: "Request not found" })
@@ -90,9 +105,21 @@ export const HandleUpdateRequestByEmployee = async (req, res) => {
 
 export const HandleUpdateRequestByHR = async (req, res) => {
     try {
-        const { requestID, approvedby, status } = req.body
+        const { requestID, status } = req.body
 
-        const request = await GenerateRequest.findByIdAndUpdate(requestID, { approvedby, status }, { new: true })
+        if (!requestID || !status) {
+            return res.status(400).json({ success: false, message: "Request ID and status are required" })
+        }
+
+        if (!["Approved", "Denied", "Pending"].includes(status)) {
+            return res.status(400).json({ success: false, message: "Invalid status value" })
+        }
+
+        const request = await GenerateRequest.findOneAndUpdate(
+            { _id: requestID, organizationID: req.ORGID },
+            { approvedby: req.HRid, status },
+            { new: true }
+        ).populate(requestPopulation, requestPopulationSelect)
 
         if (!request) {
             return res.status(404).json({ success: false, message: "Request not found" })
@@ -118,9 +145,13 @@ export const HandleDeleteRequest = async (req, res) => {
 
         const employee = await Employee.findById(request.employee)
 
-        const index = employee.generaterequest.indexOf(requestID)
-        employee.generaterequest.splice(index, 1)
-        await employee.save()
+        if (employee) {
+            const index = employee.generaterequest.findIndex((item) => item.toString() === requestID)
+            if (index >= 0) {
+                employee.generaterequest.splice(index, 1)
+                await employee.save()
+            }
+        }
 
         await request.deleteOne()
 

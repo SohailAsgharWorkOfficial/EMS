@@ -112,6 +112,15 @@ export function HRdashboardSidebar() {
                                 </SidebarMenuItem>
                             </NavLink>
 
+                            <NavLink to={"/HR/dashboard/applicants"} className={({ isActive }) => { return isActive ? "bg-blue-200 rounded-lg" : "" }}>
+                                <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
+                                    <SidebarMenuButton className="gap-4">
+                                        <img src="/../../src/assets/HR-Dashboard/employee-2.png" alt="" className="w-7" />
+                                        <button className="text-[16px]">Applicants</button>
+                                    </SidebarMenuButton>
+                                </SidebarMenuItem>
+                            </NavLink>
+
                             <NavLink to={"/HR/dashboard/interview-insights"} className={({ isActive }) => { return isActive ? "bg-blue-200 rounded-lg" : "" }}>
                                 <SidebarMenuItem className="my-1 hover:bg-blue-200 rounded-lg">
                                     <SidebarMenuButton className="gap-4">

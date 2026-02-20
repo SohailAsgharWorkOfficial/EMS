@@ -1,10 +1,14 @@
 import express from "express"
-import { HandleCreateApplicant, HandleAllApplicants, HandleApplicant, HandleUpdateApplicant, HandleDeleteApplicant } from "../controllers/Applicant.controller.js"
+import { HandleCreateApplicant, HandleAllApplicants, HandleApplicant, HandleUpdateApplicant, HandleDeleteApplicant, HandlePublicOpenings, HandlePublicApplicantApply } from "../controllers/Applicant.controller.js"
 import { VerifyhHRToken } from '../middlewares/Auth.middleware.js'
 import { RoleAuthorization } from '../middlewares/RoleAuth.middleware.js'
 
 
 const router = express.Router()
+
+router.get("/public/openings", HandlePublicOpenings)
+
+router.post("/public/apply", HandlePublicApplicantApply)
 
 router.post("/create-applicant", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleCreateApplicant)
 

@@ -1,6 +1,6 @@
 import express from 'express'
-import { HandleAllInterviews, HandleCreateInterview, HandleInterview, HandleUpdateInterview, HandleDeleteInterview } from '../controllers/InterviewInsights.controller.js'
-import { VerifyhHRToken } from '../middlewares/Auth.middleware.js'
+import { HandleAllInterviews, HandleEmployeeInterviews, HandleCreateInterview, HandleInterview, HandleUpdateInterview, HandleDeleteInterview } from '../controllers/InterviewInsights.controller.js'
+import { VerifyEmployeeToken, VerifyhHRToken } from '../middlewares/Auth.middleware.js'
 import { RoleAuthorization } from '../middlewares/RoleAuth.middleware.js'
 
 
@@ -10,6 +10,8 @@ const router = express.Router()
 router.post("/create-interview", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleCreateInterview)
 
 router.get("/all", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleAllInterviews)
+
+router.get("/employee/all", VerifyEmployeeToken, HandleEmployeeInterviews)
 
 router.get("/:interviewID", VerifyhHRToken, RoleAuthorization("HR-Admin"), HandleInterview)
 

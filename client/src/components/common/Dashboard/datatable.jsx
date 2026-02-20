@@ -1,164 +1,13 @@
 import {
     Table,
     TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
 export const DataTable = ({ noticedata }) => {
-    console.log("This is notice data", noticedata)
-    const Notices = [
-        // {
-        //     invoice: "INV001",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$250.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV002",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$150.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV003",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$350.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV004",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$450.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV005",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$550.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV006",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$200.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV007",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$300.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV008",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$550.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV009",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$200.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV010",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$300.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV011",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$550.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV012",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$200.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV013",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$300.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV014",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$550.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV015",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$200.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV016",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$300.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV017",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$550.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV018",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$200.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV019",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$300.00",
-        //     paymentMethod: "Credit Card",
-        // },
-        // {
-        //     invoice: "INV020",
-        //     paymentStatus: "Paid",
-        //     totalAmount: "$550.00",
-        //     paymentMethod: "PayPal",
-        // },
-        // {
-        //     invoice: "INV021",
-        //     paymentStatus: "Pending",
-        //     totalAmount: "$200.00",
-        //     paymentMethod: "Bank Transfer",
-        // },
-        // {
-        //     invoice: "INV022",
-        //     paymentStatus: "Unpaid",
-        //     totalAmount: "$300.00",
-        //     paymentMethod: "Credit Card",
-        // },
-    ]
-
     const notices = Array.isArray(noticedata?.notices) ? noticedata.notices : []
-
-    for (let index = 0; index < notices.length; index++) {
-            console.log("This is notice data", noticedata.notices)
-            Notices.push(
-                {
-                    noticeID: index + 1,
-                    noticeTitle: notices[index]?.title || "-",
-                    noticeAudience: notices[index]?.audience || "-",
-                    noticeCreatedBy: `${notices[index]?.createdby?.firstname || ""} ${notices[index]?.createdby?.lastname || ""}`.trim() || "-",
-                }
-            )
-    }
-
-    console.log("Notice array", Notices)
 
     return (
 
@@ -178,12 +27,18 @@ export const DataTable = ({ noticedata }) => {
 
                 <TableBody>
 
-                    {Notices.map((Notice) => (
-                        <TableRow key={Notice.noticeID}>
-                            <TableCell className="font-medium">{Notice.noticeID}</TableCell>
-                            <TableCell>{Notice.noticeTitle}</TableCell>
-                            <TableCell>{Notice.noticeAudience}</TableCell>
-                            <TableCell className="text-right">{Notice.noticeCreatedBy}</TableCell>
+                    {notices.length === 0 ? (
+                        <TableRow>
+                            <TableCell className="text-center text-muted-foreground" colSpan={4}>
+                                No recent notices available.
+                            </TableCell>
+                        </TableRow>
+                    ) : notices.map((notice, index) => (
+                        <TableRow key={notice._id || index}>
+                            <TableCell className="font-medium">{index + 1}</TableCell>
+                            <TableCell>{notice?.title || "-"}</TableCell>
+                            <TableCell>{notice?.audience || "-"}</TableCell>
+                            <TableCell className="text-right">{`${notice?.createdby?.firstname || ""} ${notice?.createdby?.lastname || ""}`.trim() || "-"}</TableCell>
                         </TableRow>
                     ))}
 

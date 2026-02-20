@@ -98,35 +98,37 @@ export const HRAsyncReducer = (builder, thunk) => {
             }
         })
         .addCase(thunk.rejected, (state, action) => {
-            if (action.payload.type == "signup") {
+            const payload = action.payload || { success: false, message: action.error?.message || "Network error" }
+
+            if (payload.type == "signup") {
                 state.isSignUp = false
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message
-                state.error.content = action.payload
+                state.error.message = payload.message
+                state.error.content = payload
             }
-            if (action.payload.type == "HRcodeavailable") {
+            else if (payload.type == "HRcodeavailable") {
                 // state.isSignUp = true
                 state.isLoading = false;
                 // state.isAuthenticated = true
                 state.isVerified = false
                 state.isVerifiedEmailAvailable = false
                 state.error.status = false;
-                state.error.content = action.payload
+                state.error.content = payload
             }
-            if (action.payload.gologin) {
+            else if (payload.gologin) {
                 state.isSignUp = false
                 state.isLoading = false;
                 state.isAuthenticated = false
                 state.error.status = false;
-                state.error.message = action.payload.message
-                state.error.content = action.payload
+                state.error.message = payload.message
+                state.error.content = payload
             }
             else {
                 state.isLoading = false;
                 state.error.status = true;
-                state.error.message = action.payload.message
-                state.error.content = action.payload
+                state.error.message = payload.message
+                state.error.content = payload
             }
         });
 }

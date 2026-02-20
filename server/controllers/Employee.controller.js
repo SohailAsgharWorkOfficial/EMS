@@ -42,6 +42,10 @@ export const HandleEmployeeByEmployee = async (req, res) => {
             .select("firstname lastname email contactnumber department attendance notice salary leaverequest generaterequest")
             .populate("department", "name")
             .populate({
+                path: "attendance",
+                select: "status attendancelog createdAt updatedAt",
+            })
+            .populate({
                 path: "salary",
                 select: "basicpay bonuses deductions netpay currency duedate paymentdate status createdAt",
                 options: { sort: { duedate: -1 } }
